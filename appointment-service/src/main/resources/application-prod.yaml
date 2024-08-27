@@ -14,3 +14,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka-service:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    leaseExpirationDurationInSeconds: 90
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${spring.cloud.client.hostname}:${server.port}
