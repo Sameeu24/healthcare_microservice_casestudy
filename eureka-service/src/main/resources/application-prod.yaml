@@ -1,0 +1,16 @@
+app:
+  name: Eureka Service
+  description: Eureka Service
+  version: 1.0.0
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    wait-time-in-ms: 500
+
+
+server:
+  port: 8761
+

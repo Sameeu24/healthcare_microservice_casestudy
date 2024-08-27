@@ -1,7 +1,19 @@
 networks:
-  mongo:
-  mysql:
+  default:
+    driver: bridge
+
 services:
+  eureka_service:
+    build: ./eureka-service
+    container_name: eureka-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8761:8761"
+    networks:
+      - default
+    restart: always
+
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -10,8 +22,9 @@ services:
     volumes:
       - ./data/mongo:/data/db
     networks:
-      - mongo
+      - default
     restart: always
+
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -26,8 +39,9 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
     networks:
-      - mysql
+      - default
     restart: always
+
   patient_service:
     build: ./patient-service
     container_name: patient-service
@@ -37,9 +51,11 @@ services:
       - "8100:8100"
     depends_on:
       - mysql
+      - eureka_service
     networks:
-      - mysql
+      - default
     restart: always
+
   doctor_service:
     build: ./doctor-service
     container_name: doctor-service
@@ -49,9 +65,11 @@ services:
       - "8200:8200"
     depends_on:
       - mongo
+      - eureka_service
     networks:
-      - mongo
+      - default
     restart: always
+
   appointment_service:
     build: ./appointment-service
     container_name: appointment-service
@@ -62,7 +80,7 @@ services:
     depends_on:
       - mysql
       - mongo
+      - eureka_service
     networks:
-      - mysql
-      - mongo
+      - default
     restart: always
